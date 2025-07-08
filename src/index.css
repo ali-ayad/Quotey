@@ -53,11 +53,14 @@
 
 body {
   margin: 0;
-  padding: 30px;
+  
+  box-sizing: border-box;
 
 }
 
-
+.app-container {
+  padding: 30px;
+}
 
 
 @media (prefers-color-scheme: light) {
