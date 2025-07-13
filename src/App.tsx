@@ -26,6 +26,16 @@ function App() {
       setQuotes(JSON.parse(stored));
     }
   };
+  const handleDeleteQuote = (id: number) => {
+  const stored = localStorage.getItem("quotes");
+  if (!stored) return;
+
+  const existing = JSON.parse(stored) as Quote[];
+  const updated = existing.filter((q) => q.id !== id);
+  localStorage.setItem("quotes", JSON.stringify(updated));
+  setQuotes(updated);
+};
+
 
   return (
     <div className="flex flex-col app-container justify-between max-w-7xl mx-auto py-6">
@@ -34,7 +44,7 @@ function App() {
         <AddQuote onAdd={handleAddQuote} />
       </div>
 
-      <QuoteList quotes={quotes} />
+      <QuoteList quotes={quotes} onDelete={handleDeleteQuote} />
     </div>
   );
 }
