@@ -48,10 +48,8 @@ export function AddQuote({ onAdd }: AddQuoteProps) {
 
       <DialogContent className="sm:max-w-[625px]">
         <DialogHeader>
-          <DialogTitle>Add a new quote</DialogTitle>
-          <DialogDescription>
-            Share a thought-provoking or inspiring quote.
-          </DialogDescription>
+          <DialogTitle className="text-center">Add a new quote</DialogTitle>
+         
         </DialogHeader>
 
         <div className="mt-4 space-y-2">
@@ -70,11 +68,9 @@ export function AddQuote({ onAdd }: AddQuoteProps) {
             className="w-full border px-3 py-2 rounded"
           />
 
-          <div className="flex justify-end gap-2 pt-4">
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-            <DialogClose asChild>
+          <div className="flex w-full gap-2 pt-4">
+          
+            <DialogClose asChild className="w-full">
               <Button onClick={handleAddQuote}>Add</Button>
             </DialogClose>
           </div>
