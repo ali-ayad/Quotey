@@ -36,6 +36,11 @@ function App() {
   setQuotes(updated);
 };
 
+const handleReorder = (newQuotes: Quote[]) => {
+  localStorage.setItem("quotes", JSON.stringify(newQuotes));
+  setQuotes(newQuotes);
+};
+
 
   return (
     <div className="flex flex-col app-container justify-between max-w-7xl mx-auto py-6">
@@ -44,7 +49,7 @@ function App() {
         <AddQuote onAdd={handleAddQuote} />
       </div>
 
-      <QuoteList quotes={quotes} onDelete={handleDeleteQuote} />
+      <QuoteList quotes={quotes} onDelete={handleDeleteQuote} onReorder={handleReorder} />
     </div>
   );
 }
