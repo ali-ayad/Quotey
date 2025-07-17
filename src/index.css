@@ -53,7 +53,7 @@
 
 body {
   margin: 0;
-  
+    background-color: #f9fafb;
   box-sizing: border-box;
 
 }
@@ -66,7 +66,7 @@ body {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: #f2eded;
   }
   a:hover {
     color: #747bff;

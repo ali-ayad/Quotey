@@ -46,7 +46,7 @@ export function AddQuote({ onAdd }: AddQuoteProps) {
         <Button>Add Quote</Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[625px]">
         <DialogHeader>
           <DialogTitle>Add a new quote</DialogTitle>
           <DialogDescription>
