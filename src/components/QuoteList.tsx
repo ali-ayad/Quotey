@@ -20,7 +20,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu";
-import { MoreVertical } from "lucide-react";
+import { GripVertical, MoreVertical } from "lucide-react";
 
 type Quote = {
   id: number;
@@ -80,42 +80,49 @@ const SortableQuoteCard = ({ quote, onDelete, onEdit }: {
   };
 
   return (
-    <div
-      ref={setNodeRef}
-      {...attributes}
-      {...listeners}
-      style={style}
-      className="relative border rounded-2xl bg-white hover:shadow-md transition p-6 overflow-hidden cursor-grab active:cursor-grabbing"
-    >
-      <p className="text-lg italic mb-2">"{quote.text}"</p>
-      <p className="text-sm text-gray-500">— {quote.author}</p>
+   <div
+  ref={setNodeRef}
+  style={style}
+  className="relative flex border rounded-2xl bg-white hover:shadow-md transition p-6 overflow-hidden cursor-grab active:cursor-grabbing"
+>
+  {/* Drag handle */}
+  <div {...attributes} {...listeners} className=" mr-2 cursor-grab active:cursor-grabbing">
+    <GripVertical className="w-5 h-5 text-gray-400" />
+  </div>
 
-      {(onDelete || onEdit) && (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-2 right-2 text-muted-foreground focus-visible:ring-0 focus:outline-none"
-            >
-              <MoreVertical className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-32">
-            {onEdit && (
-              <DropdownMenuItem onClick={() => onEdit(quote.id)}>Edit</DropdownMenuItem>
-            )}
-            {onDelete && (
-              <DropdownMenuItem
-                onClick={() => onDelete(quote.id)}
-                className="text-red-500 focus:text-red-600"
-              >
-                Delete
-              </DropdownMenuItem>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )}
-    </div>
+  <div>
+
+  <p className="text-lg italic mb-2">"{quote.text}"</p>
+  <p className="text-sm text-gray-500">— {quote.author}</p>
+  </div>
+
+  {(onDelete || onEdit) && (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-2 right-2 text-muted-foreground focus-visible:ring-0 focus:outline-none"
+        >
+          <MoreVertical className="w-4 h-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-32">
+        {onEdit && (
+          <DropdownMenuItem onClick={() => onEdit(quote.id)}>Edit</DropdownMenuItem>
+        )}
+        {onDelete && (
+          <DropdownMenuItem
+            onClick={() => onDelete(quote.id)}
+            className="text-red-500 focus:text-red-600"
+          >
+            Delete
+          </DropdownMenuItem>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )}
+</div>
+
   );
 };
