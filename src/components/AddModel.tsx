@@ -6,50 +6,89 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogClose,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type AddQuoteProps = {
+  mode: "add" | "edit";
+  initialText?: string;
+  initialAuthor?: string;
   onAdd?: () => void;
+  onSave?: (updatedQuote: { id: number; text: string; author: string }) => void;
+  quoteId?: number;
+
+  // For external control
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 };
 
-export function AddQuote({ onAdd }: AddQuoteProps) {
+export function AddQuote({
+  mode,
+  initialText = "",
+  initialAuthor = "",
+  onAdd,
+  onSave,
+  quoteId,
+  open,
+  onOpenChange,
+}: AddQuoteProps) {
   const [quote, setQuote] = useState("");
   const [author, setAuthor] = useState("");
 
-  const handleAddQuote = () => {
-    const newQuote = {
-      id: Date.now(),
-      text: quote.trim(),
-      author: author.trim(),
-    };
+  useEffect(() => {
+    if (mode === "edit") {
+      setQuote(initialText);
+      setAuthor(initialAuthor);
+    }
+  }, [mode, initialText, initialAuthor]);
 
-    if (!newQuote.text) return;
+  const handleSubmit = () => {
+    const trimmedText = quote.trim();
+    const trimmedAuthor = author.trim();
 
-    const existingQuotes = JSON.parse(localStorage.getItem("quotes") || "[]");
-    const updatedQuotes = [...existingQuotes, newQuote];
-    localStorage.setItem("quotes", JSON.stringify(updatedQuotes));
+    if (!trimmedText) return;
+
+    if (mode === "add") {
+      const newQuote = {
+        id: Date.now(),
+        text: trimmedText,
+        author: trimmedAuthor,
+      };
+
+      const existingQuotes = JSON.parse(localStorage.getItem("quotes") || "[]");
+      const updatedQuotes = [...existingQuotes, newQuote];
+      localStorage.setItem("quotes", JSON.stringify(updatedQuotes));
+      onAdd?.();
+    }
+
+    if (mode === "edit" && quoteId != null) {
+      onSave?.({
+        id: quoteId,
+        text: trimmedText,
+        author: trimmedAuthor,
+      });
+    }
 
     setQuote("");
     setAuthor("");
-
-    // Notify parent
-    onAdd?.();
+    onOpenChange?.(false); // close externally if controlled
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>Add Quote</Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {mode === "add" && (
+        <DialogTrigger asChild>
+          <Button>Add Quote</Button>
+        </DialogTrigger>
+      )}
 
       <DialogContent className="sm:max-w-[625px]">
         <DialogHeader>
-          <DialogTitle className="text-center">Add a new quote</DialogTitle>
-         
+          <DialogTitle className="text-center">
+            {mode === "add" ? "Add a new quote" : "Edit quote"}
+          </DialogTitle>
         </DialogHeader>
 
         <div className="mt-4 space-y-2">
@@ -69,9 +108,10 @@ export function AddQuote({ onAdd }: AddQuoteProps) {
           />
 
           <div className="flex w-full gap-2 pt-4">
-          
             <DialogClose asChild className="w-full">
-              <Button onClick={handleAddQuote}>Add</Button>
+              <Button onClick={handleSubmit}>
+                {mode === "add" ? "Add" : "Save"}
+              </Button>
             </DialogClose>
           </div>
         </div>
@@ -79,4 +119,3 @@ export function AddQuote({ onAdd }: AddQuoteProps) {
     </Dialog>
   );
 }
-

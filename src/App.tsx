@@ -26,6 +26,19 @@ function App() {
       setQuotes(JSON.parse(stored));
     }
   };
+  const handleEditQuote = (updated: Quote) => {
+  const stored = localStorage.getItem("quotes");
+  if (!stored) return;
+
+  const existing = JSON.parse(stored) as Quote[];
+  const updatedQuotes = existing.map((q) =>
+    q.id === updated.id ? updated : q
+  );
+
+  localStorage.setItem("quotes", JSON.stringify(updatedQuotes));
+  setQuotes(updatedQuotes);
+};
+
   const handleDeleteQuote = (id: number) => {
   const stored = localStorage.getItem("quotes");
   if (!stored) return;
@@ -46,10 +59,10 @@ const handleReorder = (newQuotes: Quote[]) => {
     <div className="flex flex-col app-container justify-between max-w-7xl mx-auto py-6">
       <div className="w-full flex justify-between items-center">
         <h1 className="font-bold text-3xl">Quotey</h1>
-        <AddQuote onAdd={handleAddQuote} />
+        <AddQuote  mode="add"  onAdd={handleAddQuote} />
       </div>
 
-      <QuoteList quotes={quotes} onDelete={handleDeleteQuote} onReorder={handleReorder} />
+      <QuoteList quotes={quotes} onDelete={handleDeleteQuote} onReorder={handleReorder} onEdit={handleEditQuote} />
     </div>
   );
 }
