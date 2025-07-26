@@ -23,6 +23,7 @@ import {
 import { GripVertical, MoreVertical } from "lucide-react";
 import { AddQuote } from "./AddModel";
 import { useState } from "react";
+import { cn } from "../lib/utils";
 
 type Quote = {
   id: number;
@@ -44,6 +45,7 @@ export const QuoteList: React.FC<Props> = ({
   onReorder,
 }) => {
   const sensors = useSensors(useSensor(PointerSensor));
+  
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
@@ -95,16 +97,22 @@ const SortableQuoteCard = ({
     const [isEditOpen, setIsEditOpen] = useState(false);
 
   const style = {
+     transition,
     transform: CSS.Transform.toString(transform),
-    transition,
+   
   };
+  const isDragging = !!transform;
 
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className="relative flex border rounded-2xl bg-white hover:shadow-md transition p-6 overflow-hidden cursor-grab active:cursor-grabbing"
-    >
+ className={cn(
+    "flex border rounded-2xl bg-white  p-6 ",
+    isDragging && "opacity-50"
+  )}    >
+
+  
       {/* Drag handle */}
       <div
         {...attributes}
