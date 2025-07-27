@@ -46,7 +46,7 @@ export const SortableQuoteCard: React.FC<SortableQuoteCardProps> = ({
       ref={setNodeRef}
       style={style}
       className={cn(
-        "relative flex border rounded-2xl bg-white p-6",
+        "relative flex border rounded-2xl bg-white p-6 max-w-full",
         isDragging && "opacity-50"
       )}
     >

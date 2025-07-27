@@ -1,20 +1,21 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   DndContext,
   PointerSensor,
   useSensor,
   useSensors,
   closestCenter,
-
+  DragOverlay,
+  type DragEndEvent,
+  type DragStartEvent,
 } from "@dnd-kit/core";
 import {
   SortableContext,
   verticalListSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
-import type { DragEndEvent } from "@dnd-kit/core";
 
 import { SortableQuoteCard } from "./SortableQuoteCard";
 
@@ -39,9 +40,16 @@ export const QuoteList: React.FC<Props> = ({
   onReorder,
 }) => {
   const sensors = useSensors(useSensor(PointerSensor));
+  const [activeId, setActiveId] = useState<number | null>(null);
+
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id as number);
+  };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+    setActiveId(null);
+
     if (!over || active.id === over.id) return;
 
     const oldIndex = quotes.findIndex((q) => q.id === active.id);
@@ -53,10 +61,13 @@ export const QuoteList: React.FC<Props> = ({
     onReorder?.(reordered);
   };
 
+  const activeQuote = quotes.find((q) => q.id === activeId);
+
   return (
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
       <SortableContext
@@ -80,6 +91,20 @@ export const QuoteList: React.FC<Props> = ({
           )}
         </div>
       </SortableContext>
+
+      {/* 🔽 Drag overlay to prevent layout shifting */}
+      <DragOverlay>
+        {activeQuote ? (
+          <div className="w-full">
+            <SortableQuoteCard
+              quote={activeQuote}
+              onDelete={onDelete}
+              onEdit={onEdit}
+              // optional: add styles here to indicate it's an overlay
+            />
+          </div>
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 };
