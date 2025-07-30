@@ -13,11 +13,11 @@ import {
 } from "@dnd-kit/core";
 import {
   SortableContext,
-  verticalListSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
 
 import { SortableQuoteCard } from "./SortableQuoteCard";
+
 
 // Types
 type Quote = {
@@ -72,9 +72,9 @@ export const QuoteList: React.FC<Props> = ({
     >
       <SortableContext
         items={quotes.map((q) => q.id)}
-        strategy={verticalListSortingStrategy}
+       
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-36 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-28 w-full">
           {quotes.length === 0 ? (
             <div className="col-span-full text-center text-muted-foreground">
               No quotes available.
